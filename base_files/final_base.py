@@ -48,7 +48,7 @@ app.configure(bg=bg_color)
 app.bind('<Escape>', lambda e: app.quit())
 
 # Add icon image
-img = tk.PhotoImage(file='../icon.png')
+img = tk.PhotoImage(file='icon.png')
 app.iconphoto(False, img)
 
 # Create a canvas for displaying the video feed
@@ -103,7 +103,7 @@ def stop_camera():
 
 tk.Button(app, text="Close", command=app.quit, **button_style).place(x=0,y=0)
 # Create buttons and labels
-image = tk.PhotoImage(file="../icon.png")
+image = tk.PhotoImage(file="icon.png")
 image_label = tk.Label(app, image=image, bg=bg_color)
 image_label.pack(pady=120)
 
