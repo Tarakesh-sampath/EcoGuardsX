@@ -8,7 +8,7 @@ from ultralytics import YOLO
 
 model = YOLO('../poacherdetection.pt')
 
-
+#vyshhnavi was here
 # Define a video capture object
 vid = cv2.VideoCapture(0)
 
