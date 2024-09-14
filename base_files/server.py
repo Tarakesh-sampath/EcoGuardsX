@@ -1,7 +1,7 @@
 import socket
 import tkinter as tk
-from tkinter import messagebox
 import winsound  # For Windows sound; use pygame or playsound for cross-platform
+import pickle
 
 # Replace with the actual IP address of the server machine
 HOST = '192.168.137.76'  # Example: '192.168.1.100'
@@ -16,9 +16,6 @@ def show_alert(message):
     # Initialize a Tkinter root window (hidden)
     root = tk.Tk()
     root.withdraw()  # Hide the main window
-    
-    # Show the notification pop-up
-    messagebox.showwarning("Alert", message)
     
     # Play the alarm sound
     play_alarm()
@@ -41,6 +38,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 break
             
             message = data.decode()
+            conn.sendall("1".encode())
+            image_size = int.from_bytes(conn.recv(4), 'big')
+            data = b''
+            while len(data) < image_size:
+                packet = conn.recv(1024)
+                if not packet:
+                    break
+                data += packet
+
+            # Deserialize the image data
+            image_buffer = pickle.loads(data)
+
+            # Save the image on the server side (OpenCV)
+            with open('saved_image/received_image.png', 'wb') as f:
+                f.write(image_buffer)
             print(f"Received from client: {message}")
             
             # Check if the received message is an "alert"

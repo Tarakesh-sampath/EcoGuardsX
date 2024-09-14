@@ -6,6 +6,7 @@ from ultralytics import YOLO
 import json
 import os
 import socket
+import pickle
 # Use the server's actual IP address
 HOST = '192.168.137.76'  # Example: '192.168.1.100'
 PORT = 65432  # Same port as used by the server
@@ -152,6 +153,12 @@ def update_canvas():
                     try:
                         message = "Alert"
                         client_socket.sendall(message.encode())
+                        if(client_socket.recv(1024).decode()=="1"):
+                            # Read image file as binary
+                            _, buffer = cv2.imencode('.png', annotated_frame)
+                            data = pickle.dumps(buffer)
+                            client_socket.sendall(len(data).to_bytes(4, 'big'))
+                            client_socket.sendall(data)
                     except socket.timeout:
                         print("Timeout: No response from server.")
                     except Exception as e:
